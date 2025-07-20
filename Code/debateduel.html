@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debate Duel by Krishiv</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    body{ background: linear-gradient(135deg, #dfe9f3, #ffffff);height: 110%;padding-bottom: 10vh;}
+    nav { box-shadow: 0 10px 10px rgba(0,0,0,0.1); }
+    .poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+.modal-title{
+  font-size: 1.5rem;
+}
+     .modal-dialog { max-width: 400px; }
+    .modal-content { padding: 1rem; font-size: 1.2rem;}
+    #duelSection { display: none; }
+    .badge-container .badge { margin: 0.2rem; }
+    .card { border-radius: .75rem; box-shadow: 0 10px 12px rgba(0,0,0,0.05); }
+    .cursor-wait { cursor: wait !important; }
+    .signin{
+    border-radius: 2rem;
+      padding: 0.75rem 2rem;
+      background-color: #46a9ff;
+      color: white;
+      text-decoration: none;
+      border: none;
+      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+      transition: all 0.4s ease;
+      font-weight: 600;
+    }
+    .signin:hover{
+      background-color: #007fee;
+      color: white;
+       box-shadow: 0 4px 10px #007feec5;
+    }
+    .signout{
+    border-radius: 2rem;
+      padding: 0.75rem 2rem;
+      background-color: #ff4646;
+      color: white;
+      text-decoration: none;
+      border: none;
+      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+      transition: all 0.4s ease;
+      font-weight: 600;
+    }
+    .signout:hover{
+      background-color: #d40101;
+      color: white;
+       box-shadow: 0 4px 10px #d4010196;
+    }
+     .register{
+    border-radius: 2rem;
+      padding: 0.75rem 2rem;
+      background-color: #00bf13;
+      color: white;
+      text-decoration: none;
+      border: none;
+      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+      transition: all 0.4s ease;
+      font-weight: 600;
+    }
+    .register:hover{
+      background-color: #00880e;
+      color: white;
+       box-shadow: 0 4px 10px #00880e77;
+    }
+    .modal input{
+      padding: 1vh;
+      margin-block: 1vh;
+      border: 1px solid #007fee;
+
+    }
+    .container input{
+      padding: 1vh;
+      margin-block: 1vh;
+      border: 1px solid #007fee;
+    }
+</style>
+</head>
+<body>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+            <div class="container-fluid mx-3 mt-2">
+                 <a class="navbar-brand poppins-medium" href="#"><h3><i class="fa-solid fa-gavel mx-3"></i>Debate Duel</h3></a>
+            </div>
+        </nav>
+        
+    <div class="modal fade" id="cookieModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <h5 class="modal-title">Cookie Consent</h5>
+        <div class="modal-body">
+          <p>Debate Duel by Krishiv uses cookies to store your progress and credentials. Please enable cookies in your browser and do not delete them, or all your data, including credentials, progress and acheivements ,will be lost.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="acceptCookies" class="btn signin">I Accept</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="authChoiceModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+        <h5 class="modal-title mb-3">Welcome to Debate Duel</h5>
+        <p>Select an option to continue:</p>
+        <div class="d-flex justify-content-around mt-3 mb-3">
+          <button id="openSignIn" class="btn signin">Sign In</button>
+          <button id="openSignUp" class="btn signout">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="signUpModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <h5 class="modal-title">Sign Up</h5>
+        <div class="modal-body">
+          <input id="suEmail" type="email" class="form-control" placeholder="Gmail address">
+          <input id="suPass" type="password" class="form-control" placeholder="Password">
+          <input id="suPassConf" type="password" class="form-control" placeholder="Confirm Password">
+        </div>
+        <div class="modal-footer">
+          <button id="signUpBtn" class="btn signout w-100">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="signInModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <h5 class="modal-title">Sign In</h5>
+        <div class="modal-body">
+          <input id="siEmail" type="email" class="form-control" placeholder="Gmail address">
+          <input id="siPass" type="password" class="form-control" placeholder="Password">
+        </div>
+        <div class="modal-footer">
+          <button id="signInBtn" class="btn signin w-100">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="container" id="duelSection">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="h5"><i class="fa-solid fa-user-circle me-2"></i><span id="userEmailDisplay"></span></div>
+      
+      <button id="logoutBtn" class="btn signout btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i>Logout</button>
+    </div>
+    <div class="mb-3">
+  <label for="gradeSelect" class="form-label"><strong style="font-size: 1.2rem;">Select Your Grade Level:</strong></label>
+  <select id="gradeSelect" class="form-select w-50" style="font-weight: 700;font-size: 1.1rem;">
+    <option value="">-- Choose Grade Level --</option>
+     <option value="junior">Junior Category</option>
+    <option value="middle">Middle Category</option>
+    <option value="high">Senior Category</option>
+    <option value="college">College</option>
+  </select>
+</div>
+    <div class="row gy-4">
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-header text-white poppins-medium" style="background:#46a9ff;font-weight: 600;"><i class="fa-solid fa-robot me-2"></i>AI Opponent</div>
+          <div class="card-body poppins-medium"><p id="opponentText" >Click Start Duel to begin!</p></div>
+        </div>
+        <textarea id="rebuttalInput" class="form-control mb-3" rows="4" placeholder="Type your rebuttal..." style="border: 1px solid #007fee;" disabled></textarea>
+        <div class="d-flex gap-2">
+          <button id="startBtn" class="btn signin flex-fill poppins-medium"><i class="fa-solid fa-play me-2"></i>Start Duel</button>
+          <button id="submitBtn" class="btn register flex-fill poppins-medium" disabled><i class="fa-solid fa-paper-plane me-2"></i>Submit</button>
+        </div>
+        <div class="card mt-3">
+          <div class="card-header text-white poppins-medium" style="background-color:#46a9ff;font-weight: 600;"><i class="fa-solid fa-comment-check me-2"></i>Feedback & Score</div>
+          <div class="card-body poppins-medium">
+            <h6>Feedback:</h6><p id="feedbackArea">-</p>
+            <h6>Score: <span id="scoreDisplay">-</span>/10</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 poppins-medium">
+        <div class="card mb-4">
+          <div class="card-header text-white" style="background-color:#46a9ff;font-weight: 600;"><i class="fa-solid fa-chart-line me-2"></i>Stats</div>
+          <div class="card-body">
+            <p><strong>XP:</strong> <span id="xpDisplay">0</span>/<span id="xpNext">100</span></p>
+            <div class="progress mb-3"><div id="xpBar" class="progress-bar" style="width:0%"></div></div>
+            <p><strong>Level:</strong> <span id="levelDisplay">1</span></p>
+            <p><strong>Streak:</strong> <span id="streakDisplay">0</span> days</p>
+            <p><strong>Duels:</strong> <span id="duelsDisplay">0</span></p>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-header text-white" style="background-color:#46a9ff;font-weight: 600;"><i class="fa-solid fa-award me-2"></i>Badges</div>
+          <div class="card-body badge-container" id="badgesArea"><em style="background-color: #007fee;">None</em></div>
+        </div>
+        <div class="card">
+          <div class="card-header text-white" style="background-color:#46a9ff;font-weight: 600;color: #fff;"><i class="fa-solid fa-bullseye me-2"></i>Daily Mission</div>
+          <div class="card-body"><p id="missionText">-</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+    <script>
+ function setCookie(n,v,d=365){
+        document.cookie = `${n}=${encodeURIComponent(v)};max-age=${d*24*3600};path=/`;
+ }
+  function getCookie(n){
+    let m = document.cookie.match('(^|;)\\s*'+n+'=([^;]+)');
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  const COOKIE_USERS = 'users';
+  const COOKIE_STATE = 'duelState_';
+  const API_KEY = 'sk-or-v1-3595f6b2cfa6efb03ddc893f8d8bf4a8ea6bd70acab9bc225e'+'f39e06b706e1a4';
+
+
+  const topics = [
+    "Freedom","Justice","Immigration","Climate Change","Social Media",
+    "Universal Income","Animal Testing","Free Speech","Death Penalty","Nuclear Energy",
+    "Privacy Rights","Genetic Engineering","Space Exploration","Mandatory Service","Carbon Tax",
+    "Single-use Plastics","Minimum Wage","School Uniforms","Drone Warfare","Vaccination",
+    "Refugees","Censorship","Home Schooling","Fast Food","Online Privacy",
+    "Paid Leave","Gig Economy","Cryptocurrencies","Voting Age","Income Inequality",
+    "Wealth Tax","Artificial Intelligence","Patent Laws","Trade Unions","Globalization",
+    "Mental Health","School Lunches","Universal Healthcare","Public Transport","Climate Action",
+    "Renewable Energy","Euthanasia","Single Payer","Open Borders","Digital Currency",
+    "Standardized Tests","Four-day Week","Public Utilities","Urbanization","Space Tourism"
+  ];
+  const missions = [
+    "🏅 Statistic Sage: Use a statistic to support your argument.",
+    "💬 Rhetoric Rogue: Pose a rhetorical question in your rebuttal.",
+    "⚔️ Contrarian Champion: Contrast with an opposing viewpoint.",
+    "🎭 Anecdote Artist: Incorporate an anecdote for emotional appeal.",
+    "🛡️ Counter Crusader: Address a counter-argument directly.",
+    "🔗 Analogy Archer: Use an analogy to clarify your point.",
+    "📚 Citation Seeker: Cite a credible source.",
+    "⚖️ Ethics Envoy: Highlight an ethical consideration.",
+    "🔍 Definition Detective: Define a key term precisely.",
+    "🔁 Parallel Paladin: Use parallel structure for impact.",
+    "🔥 Cliffhanger Conqueror: End with a powerful concluding sentence.",
+    "🌌 Imagination Invoker: Ask the audience to imagine a scenario.",
+    "🔮 Hypothetical Hero: Use a hypothetical example.",
+    "📈 Trend Tracker: Employ stats vs historical data.",
+    "📢 Action Advocate: Include a clear call to action.",
+    "🗣️ Quote Quester: Open with a relevant quotation.",
+    "🤝 Impact Ambassador: Emphasize social impact.",
+    "🌍 Global Gladiator: Frame your argument globally.",
+    "💥 One-Liner Overlord: Use a short, impactful sentence.",
+    "❓ Preemptive Protector: Preemptively answer a rebuttal.",
+    "❤️ Emotion Enchanter: Use emotional language strategically.",
+    "🔓 Vulnerability Vanguard: Acknowledge a weakness.",
+    "🛠️ Solution Smith: Propose a practical solution.",
+    "📐 Logic Luminary: Use logical progression of points.",
+    "📂 Case Commander: Incorporate a real-world case study.",
+    "⏳ Consequence Conjurer: Highlight long-term consequences.",
+    "🕊️ Moral Messenger: Make a moral appeal.",
+    "💹 Cost-Benefit Baron: Show cost–benefit analysis.",
+    "❗ Provocation Pro: Ask a provocative question.",
+    "🔂 Repetition Ranger: Use repetition for emphasis.",
+    "⚖️ Outcome Oracle: Contrast two outcomes.",
+    "🤝 Value Vanguard: Appeal to shared values.",
+    "📜 History Herald: Make a historical reference.",
+    "🗒️ Story Scribe: Use a personal story.",
+    "⚖️ Justice Jester: Frame around justice.",
+    "➡️ Cause-Effect Crusader: Use cause-and-effect language.",
+    "🎨 Imagery Iconoclast: Incorporate vivid imagery.",
+    "🤝 Credibility Cadet: Concede to build trust.",
+    "💗 Empathy Emissary: Address audience emotions.",
+    "🕰️ Timeline Tactician: Use timeline to illustrate change.",
+    "📊 Outlier Overlord: Highlight a statistical outlier.",
+    "🧠 Term Titan: Use and define a technical term.",
+    "👤 Expert Envoy: Quote an expert.",
+    "🔎 Problem Solver: Frame as solving a problem.",
+    "🔀 Conditional Commander: Use “if…then”.",
+    "🌱 Nature Navigator: Use an analogy from nature.",
+    "⚖️ Equality Exemplar: Emphasize fairness.",
+    "🛡️ Assumption Assassin: Challenge an assumption.",
+    "🎯 Hook Hunter: Open with a strong hook."
+  ];
+let state = {
+  xp: 0, level: 1, streak: 0, duels: 0,
+  maxScore: 0, lastDay: '', badges: [],
+  mission: '', missionDay: '',
+  gradeLevel: ''
+};
+
+  let currentUser='';
+
+  function loadState() {
+  const cookie = getCookie(COOKIE_STATE + currentUser);
+  if (cookie) {
+    state = JSON.parse(cookie);
+  }
+  newMission(); 
+  saveState();
+}
+function saveState() {
+    setCookie(COOKIE_STATE + currentUser, JSON.stringify(state));
+  }
+
+  function newMission() {
+    const today = dayjs().format('YYYY-MM-DD');
+    if (state.missionDay !== today || !state.mission) {
+      state.mission = missions.length
+        ? missions[Math.floor(Math.random() * missions.length)]
+        : 'No mission available';
+      state.missionDay = today;
+    }
+  }
+   function render() {
+    document.getElementById('xpDisplay').innerText = state.xp;
+    const nextXp = state.level * 100;
+    document.getElementById('xpNext').innerText = nextXp;
+    document.getElementById('xpBar').style.width =
+      Math.min(100, state.xp / nextXp * 100) + '%';
+    document.getElementById('levelDisplay').innerText = state.level;
+    document.getElementById('streakDisplay').innerText = state.streak;
+    document.getElementById('duelsDisplay').innerText = state.duels;
+
+    const ba = document.getElementById('badgesArea');
+    ba.innerHTML = '';
+    if (!state.badges.length) ba.innerHTML = '<em>None</em>';
+    state.badges.forEach(b => {
+      ba.innerHTML += `<span class="badge me-1" style=background-color:#46a9ff;>${b}</span>`;
+    });
+
+    document.getElementById('missionText').innerText = state.mission;
+  }
+function award(score, met) {
+    state.xp += score * 10;
+    while (state.xp >= state.level * 100) {
+      state.xp -= state.level * 100;
+      state.level++;
+    }
+    const today = dayjs().format('YYYY-MM-DD');
+    const yest = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
+    if (state.lastDay === yest) state.streak++;
+    else if (state.lastDay !== today) state.streak = 1;
+    state.lastDay = today;
+    state.duels++;
+    if (score > state.maxScore) state.maxScore = score;
+
+    const checks = [
+      true,
+      state.xp >= 500,
+      state.streak >= 7,
+      met,
+      state.duels >= 10,
+      state.duels >= 50,
+      state.maxScore >= 9
+    ];
+    const names = [
+      'First Rebuttal',
+      'Refutation Master',
+      '7-Day Streak',
+      null,
+      '10 Duels',
+      '50 Duels',
+      'High Scorer'
+    ];
+   checks.forEach((passed, i) => {
+    if (!passed) return;
+    let badgeName;
+    if (i === 3) {
+      badgeName = state.mission;           
+    } else {
+      badgeName = names[i];
+    }
+    if (badgeName && !state.badges.includes(badgeName)) {
+      state.badges.push(badgeName);
+    }
+  });
+
+    newMission();
+    saveState();
+    render();
+  }
+ async function fetchAI() {
+  if (!state.gradeLevel) {
+  alert("Please select your grade level before starting the duel.");
+  return;
+}
+    document.getElementById('opponentText').innerText = 'Thinking...';
+    const topic = topics[Math.floor(Math.random() * topics.length)];
+     const gradeLevel = state.gradeLevel || 'high school';
+
+    const res = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        model: 'deepseek/deepseek-chat-v3-0324:free',
+        messages: [
+          { role: 'system', content: 'You are an advanced debater challenging debate opponent.' },
+          { role: 'user', content: `Present a concise argument on "${topic}".Frame your response for a "${gradeLevel}" category debator. Do not include any headings` }
+        ]
+      },
+      { headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' } }
+    );
+    document.getElementById('opponentText').innerText =
+      res.data.choices[0].message.content.trim();
+    document.getElementById('rebuttalInput').disabled = false;
+    document.getElementById('submitBtn').disabled = false;
+  }
+
+  async function evaluate() {
+    const input = document.getElementById('rebuttalInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const feedbackArea = document.getElementById('feedbackArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+
+    const txt = input.value.trim();
+    if (!txt) return;
+
+    document.body.classList.add('cursor-wait');
+    submitBtn.disabled = true;
+
+    try {
+      const res = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          model: 'deepseek/deepseek-chat-v3-0324:free',
+          temperature: 0.5,
+          messages: [
+            {
+              role: 'system',
+              content: [
+                'You are an objective debate judge.',
+                'Respond with only a JSON object:',
+                '{',
+                '  "score": <integer 1–10>,',
+                '  "feedback": "<string>",',
+                '  "missionMet": <true|false>',
+                '}',
+                'No extra text or formatting.'
+              ].join('\n')
+            },
+            { role: 'user', content: `Rebuttal: """${txt}"""\nMission: "${state.mission}"` }
+          ]
+        },
+        { headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' } }
+      );
+
+      let raw = res.data.choices[0].message.content.trim()
+        .replace(/^```json/, '')
+        .replace(/```$/, '')
+        .trim();
+
+      let j;
+      try {
+        j = JSON.parse(raw);
+      } catch {
+        console.error('Failed JSON parse:', raw);
+        feedbackArea.innerText = 'Error: Invalid feedback format.';
+        return;
+      }
+
+      const fb = j.feedback || 'No feedback provided.';
+      const sc = typeof j.score === 'number' ? j.score : 0;
+      const met = !!j.missionMet;
+
+      feedbackArea.innerText = fb;
+      scoreDisplay.innerText = sc;
+      award(sc, met);
+
+      input.value = '';
+      fetchAI();
+    } catch (e) {
+      console.error(e);
+      document.getElementById('feedbackArea').innerText = 'Error: Unable to contact judge.';
+    } finally {
+      document.body.classList.remove('cursor-wait');
+      submitBtn.disabled = false;
+    }
+  }
+  const authChoiceModal = new bootstrap.Modal(document.getElementById('authChoiceModal'));
+  const cookieModal     = new bootstrap.Modal(document.getElementById('cookieModal'));
+  const signUpModal     = new bootstrap.Modal(document.getElementById('signUpModal'));
+  const signInModal     = new bootstrap.Modal(document.getElementById('signInModal'));
+
+  document.getElementById('acceptCookies').onclick = () => {
+    setCookie('cookiesOK', 1);
+    cookieModal.hide();
+    authChoiceModal.show();
+  };
+  document.getElementById('openSignUp').onclick = () => {
+    authChoiceModal.hide();
+    signUpModal.show();
+  };
+  document.getElementById('openSignIn').onclick = () => {
+    authChoiceModal.hide();
+    signInModal.show();
+    
+  };
+
+  document.getElementById('signUpBtn').onclick = () => {
+    const e = document.getElementById('suEmail').value.trim();
+    const p = document.getElementById('suPass').value;
+    const c = document.getElementById('suPassConf').value;
+    if (!e || !p) return alert('Enter email & password');
+    if (p !== c) return alert('Passwords must match');
+    let users = [];
+    try { users = JSON.parse(getCookie(COOKIE_USERS)); } catch {}
+    if (users.find(u => u.email === e)) return alert('Email already registered');
+    users.push({ email: e, pass: p });
+    setCookie(COOKIE_USERS, JSON.stringify(users));
+    signUpModal.hide();
+    signInModal.show();
+  };
+
+  document.getElementById('signInBtn').onclick = () => {
+    const e = document.getElementById('siEmail').value.trim();
+    const p = document.getElementById('siPass').value;
+    let users = [];
+    try { users = JSON.parse(getCookie(COOKIE_USERS)); } catch {}
+    const u = users.find(u => u.email === e);
+    if (!u || u.pass !== p) return alert('Invalid credentials');
+    setCookie('userEmail', e);
+    setCookie('userPass', p);
+    currentUser = e;
+    signInModal.hide();
+    document.getElementById('duelSection').style.display = 'block';
+    document.getElementById('userEmailDisplay').innerText = e;
+    loadState();
+    document.getElementById('gradeSelect').value = state.gradeLevel; // Show saved grade
+    document.getElementById('gradeSelect').onchange = (e) => {
+    state.gradeLevel = e.target.value;
+    saveState();
+    };
+    render();
+  };
+
+  document.getElementById('logoutBtn').onclick = () => {
+    setCookie('userEmail', '', -1);
+    setCookie('userPass', '', -1);
+    document.getElementById('duelSection').style.display = 'none';
+    authChoiceModal.show();
+    window.location.href="index.html"
+  };
+
+  window.onload = () => {
+    if (!navigator.cookieEnabled) alert('Enable cookies to use this app.');
+    if (!getCookie('cookiesOK')) cookieModal.show();
+    else authChoiceModal.show();
+    document.getElementById('startBtn').onclick = fetchAI;
+    document.getElementById('submitBtn').onclick = evaluate;
+  };
+
+    </script>
+</body>
+</html>

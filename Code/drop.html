@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fix the Flow: Debate Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #dfe9f3, #ffffff);
+      margin: 0;
+      height: fit-content;
+      padding: 2rem;
+      text-align: center;
+      color: #1f2937;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+ 
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .slot, .option {
+      min-width: 240px;
+      padding: 1rem;
+      border-radius: 15px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.45);
+      box-shadow: 0 6px 20px #34a0ff52;
+      transition: all 0.3s ease;
+    }
+
+    .slot {
+      border: 1px solid #007fee;
+      min-height: 70px;
+    }
+
+    .option {
+      cursor: grab;
+      font-weight: 600;
+    }
+
+    .option:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 0 12px 20px #007fee;
+    }
+
+    .option.dragging {
+      opacity: 0.5;
+    }
+
+    #feedback {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    button {
+      border-radius: 2rem;
+      padding: 0.75rem 2rem;
+      background-color: #46a9ff;
+      color: white;
+      font-size: 1.1rem;
+      text-decoration: none;
+      border: none;
+      margin-bottom: 2vh;
+      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+       background-color: #006fd1;
+      transform: scale(1.2);
+      box-shadow: 0 4px 10px #60d5ff;
+    }
+        .back{
+    border-radius: 2rem;
+      padding: 0.75rem 2rem;
+      background-color: #46a9ff;
+      color: white;
+      text-decoration: none;
+      border: none;
+      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    .back:hover{
+      background-color: #006fd1;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px #60d5ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Fix the Flow: Debate Speaker Order</h1>
+  <select id="formatSelect" style="font-size: 1.1rem; margin-bottom: 5vh;padding: 1vh;font-weight: 700;">
+    <option value="ap">Asian Parliamentary (AP)</option>
+    <option value="bp">British Parliamentary (BP)</option>
+    <option value="wsdc">World Schools (WSDC)</option>
+  </select>
+
+  <div class="container" id="dropzone"></div>
+  <div class="container" id="options"></div>
+
+  <button onclick="checkOrder()">✅ Check Order</button>
+  <p id="feedback"></p>
+ <a href="index.html" class="back">
+    Go to Home
+  </a>
+  <script>
+    const formats = {
+      ap: [
+        "Prime Minister (Government)",
+        "Leader of Opposition (Opposition)",
+        "Deputy Prime Minister (Government)",
+        "Deputy Leader of Opposition (Opposition)",
+        "Government Whip",
+        "Opposition Whip"
+      ],
+      bp: [
+        "Prime Minister (Opening Government)",
+        "Leader of Opposition (Opening Opposition)",
+        "Deputy Prime Minister (Opening Government)",
+        "Deputy Leader of Opposition (Opening Opposition)",
+        "Member of Government (Closing Government)",
+        "Member of Opposition (Closing Opposition)",
+        "Government Whip (Closing Government)",
+        "Opposition Whip (Closing Opposition)"
+      ],
+      wsdc: [
+        "First Government Speaker",
+        "First Opposition Speaker",
+        "Second Government Speaker",
+        "Second Opposition Speaker",
+        "Third Government Speaker",
+        "Third Opposition Speaker",
+        "Government Reply",
+        "Opposition Reply"
+      ]
+    };
+
+    let currentFormat = 'ap';
+    const dropzone = document.getElementById('dropzone');
+    const options = document.getElementById('options');
+
+    document.getElementById('formatSelect').addEventListener('change', (e) => {
+      currentFormat = e.target.value;
+      loadGame();
+    });
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function loadGame() {
+      dropzone.innerHTML = '';
+      options.innerHTML = '';
+      document.getElementById('feedback').innerText = '';
+
+      const formatArray = formats[currentFormat];
+      const shuffled = shuffle([...formatArray]);
+
+      formatArray.forEach((_, i) => {
+        const slot = document.createElement('div');
+        slot.className = 'slot';
+        slot.dataset.index = i;
+        slot.ondragover = (e) => e.preventDefault();
+        slot.ondrop = (e) => {
+          e.preventDefault();
+          const id = e.dataTransfer.getData('text');
+          const dragged = document.getElementById(id);
+          const existing = slot.firstChild;
+          if (existing) options.appendChild(existing);
+          slot.innerHTML = '';
+          slot.appendChild(dragged);
+          animateDrop(dragged);
+        };
+        dropzone.appendChild(slot);
+      });
+
+      shuffled.forEach((name, idx) => {
+        const option = document.createElement('div');
+        option.className = 'option';
+        option.id = 'opt-' + idx;
+        option.draggable = true;
+        option.innerText = name;
+        option.ondragstart = (e) => {
+          e.dataTransfer.setData('text', e.target.id);
+          e.target.classList.add('dragging');
+        };
+        option.ondragend = (e) => {
+          e.target.classList.remove('dragging');
+        };
+        options.appendChild(option);
+      });
+    }
+
+    function animateDrop(element) {
+      element.style.transition = 'transform 0.2s ease';
+      element.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        element.style.transform = 'scale(1)';
+      }, 200);
+    }
+
+    function checkOrder() {
+      const slots = document.querySelectorAll('.slot');
+      const correct = formats[currentFormat];
+      let score = 0;
+
+      slots.forEach((slot, i) => {
+        const placed = slot.firstChild?.innerText;
+        if (placed === correct[i]) score++;
+      });
+
+      const feedback = document.getElementById('feedback');
+      if (score === correct.length) {
+        feedback.innerText = `🎉 Perfect! You nailed the ${currentFormat.toUpperCase()} format!`;
+      } else {
+        feedback.innerText = `You got ${score}/${correct.length} correct. Try again!`;
+      }
+    }
+
+    window.onload = loadGame;
+  </script>
+</body>
+</html>
